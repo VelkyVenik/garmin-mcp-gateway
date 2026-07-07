@@ -1,5 +1,11 @@
 # Garmin MCP Gateway
 
+> [!WARNING]
+> **📦 This project has moved to [MissingMCP](https://github.com/VelkyVenik/missingmcp).**
+> Development continues there as a multi-adapter gateway (Garmin, WHOOP, …); the live
+> Garmin connector is at **[missingmcp.com/garmin](https://missingmcp.com/garmin)**.
+> This repository is kept for reference only and no longer receives updates.
+
 A multi-user, OAuth 2.1–protected gateway that lets a small trusted circle each
 connect their own [Garmin Connect](https://connect.garmin.com) account to Claude
 (iOS, Android, Web, Desktop). It wraps the **unmodified**
