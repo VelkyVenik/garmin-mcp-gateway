@@ -20,6 +20,8 @@
     .subtitle { color: #666; margin-bottom: 1.5rem; }
     .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 0.8rem 1rem; border-radius: 4px; margin: 1.2rem 0; font-size: 0.9rem; color: #92400e; }
     .warning strong { color: #78350f; }
+    .moved { background: #dbeafe; border-left: 4px solid #2563eb; padding: 0.8rem 1rem; border-radius: 4px; margin: 1.2rem 0; font-size: 0.95rem; color: #1e40af; }
+    .moved strong { color: #1e3a8a; }
     hr { border: none; border-top: 1px solid #eee; margin: 1.5rem 0; }
     .bmc { display: inline-block; margin-top: 0.5rem; padding: 0.5rem 0.9rem; background: #FF813F; color: #fff; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
   </style>
@@ -27,6 +29,13 @@
 <body>
   <h1>Garmin MCP Gateway</h1>
   <p class="subtitle">Connect your <a href="https://connect.garmin.com">Garmin Connect</a> account to Claude (iOS, Android, Web, Desktop).</p>
+
+  <div class="moved">
+    <strong>This project has moved.</strong> The Garmin gateway now lives at
+    <a href="https://missingmcp.com/garmin">missingmcp.com/garmin</a> as part of
+    <a href="https://missingmcp.com">MissingMCP</a>. Please set up new connections there
+    &mdash; this page is kept for reference only.
+  </div>
 
   <h2>What is this?</h2>
   <p>This gateway lets you use your Garmin Connect data from Claude. It wraps the unmodified <a href="https://github.com/Taxuspt/garmin_mcp">garmin_mcp</a> server and adds OAuth so you can sign in securely &mdash; you authenticate once with your Garmin credentials and Claude handles the rest.</p>
