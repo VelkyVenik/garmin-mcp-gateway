@@ -23,6 +23,9 @@
     .moved { background: #1e3a8a; color: #fff; padding: 1.1rem 1.3rem; border-radius: 8px; margin: 0 0 1.8rem; font-size: 1.05rem; line-height: 1.55; }
     .moved strong { font-size: 1.15rem; }
     .moved a { color: #fff; }
+    .moved ol { margin: 0.5rem 0 0 1.2rem; padding: 0; }
+    .moved li { margin: 0.3rem 0; }
+    .moved code { background: rgba(255,255,255,.15); color: #fff; padding: 0.1rem 0.3rem; border-radius: 4px; font-size: 0.9em; word-break: break-all; }
     .moved .go { display: inline-block; margin-top: 0.7rem; padding: 0.55rem 1rem; background: #fff; color: #1e3a8a; border-radius: 6px; text-decoration: none; font-weight: 700; }
     hr { border: none; border-top: 1px solid #eee; margin: 1.5rem 0; }
     .bmc { display: inline-block; margin-top: 0.5rem; padding: 0.5rem 0.9rem; background: #FF813F; color: #fff; border-radius: 6px; text-decoration: none; font-size: 0.9rem; font-weight: 600; }
@@ -31,7 +34,11 @@
 <body>
   <div class="moved">
     <strong>&#128230; This project has moved to <a href="https://missingmcp.com">MissingMCP</a>.</strong><br>
-    Please set up new connections at the new home &mdash; this page is kept for reference only.<br>
+    This gateway is being retired &mdash; please switch to the new home now:
+    <ol>
+      <li>In Claude, open <strong>Settings &rarr; Connectors</strong> and <strong>remove this connector</strong>.</li>
+      <li>Add the new one from <a href="https://missingmcp.com/garmin">missingmcp.com/garmin</a> &mdash; server URL <code>https://missingmcp.com/garmin/mcp</code>.</li>
+    </ol>
     <a class="go" href="https://missingmcp.com/garmin">Continue to missingmcp.com/garmin &rarr;</a>
   </div>
 
@@ -42,12 +49,7 @@
   <p>This gateway lets you use your Garmin Connect data from Claude. It wraps the unmodified <a href="https://github.com/Taxuspt/garmin_mcp">garmin_mcp</a> server and adds OAuth so you can sign in securely &mdash; you authenticate once with your Garmin credentials and Claude handles the rest.</p>
 
   <h2>How to connect</h2>
-  <ol>
-    <li>In any Claude client, go to <strong>Settings &rarr; Connectors &rarr; Add custom connector</strong> (or run <code>claude mcp add --transport http garmin {PUBLIC_URL}/mcp</code> in the CLI).</li>
-    <li>Set the Server URL to: <code>{PUBLIC_URL}/mcp</code></li>
-    <li>Claude opens a sign-in page &mdash; enter your Garmin Connect email and password (and an MFA code if prompted).</li>
-    <li>Once authenticated, Claude has access to your Garmin tools. Done!</li>
-  </ol>
+  <p>New connections are no longer set up here &mdash; follow the guide at <a href="https://missingmcp.com/garmin">missingmcp.com/garmin</a>.</p>
 
   <div class="warning">
     <strong>Important:</strong> Your Garmin password is used once to sign in and is <strong>never stored</strong>. Only the resulting Garmin session tokens are kept on this server, encrypted with AES-256-GCM. <strong>Only use this gateway if you trust the server operator.</strong> This instance is operated by {OPERATOR_NAME}{OPERATOR_EMAIL}.
