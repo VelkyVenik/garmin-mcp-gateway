@@ -10,7 +10,8 @@ from starlette.testclient import TestClient
 from garmin_gateway import store, oauth, security, garmin_login
 from garmin_gateway.config import load_config
 
-CONFIG = load_config({"GATEWAY_SECRET": "z" * 40, "PUBLIC_URL": "https://gw.example.com"})
+CONFIG = load_config({"GATEWAY_SECRET": "z" * 40, "PUBLIC_URL": "https://gw.example.com",
+                      "GATEWAY_SUNSET": "0"})
 
 
 @pytest.fixture

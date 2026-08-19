@@ -130,7 +130,16 @@ def _oauth_params_from(source) -> dict:
     }
 
 
+def _moved_page() -> HTMLResponse:
+    # Sunset: the gateway no longer signs anyone in — the OAuth popup shows
+    # where to reconnect instead. 200 so every browser renders it.
+    return HTMLResponse(_tpl("moved.html"))
+
+
 async def authorize_get(request, _templates, state, conn, config) -> HTMLResponse:
+    if config.sunset:
+        log("authorize-sunset", step="get")
+        return _moved_page()
     params = _oauth_params_from(request.query_params)
     client = store.get_client(conn, params["client_id"])
     if client is None:
@@ -157,6 +166,9 @@ def _finish(conn, config, params: dict, tokens_json: str, email: str) -> Redirec
 
 
 async def authorize_post(request, _templates, state, conn, config) -> HTMLResponse | RedirectResponse:
+    if config.sunset:
+        log("authorize-sunset", step="post")
+        return _moved_page()
     form = await request.form()
     has_login_id = bool(form.get("login_id"))
     log("authorize-post", step="mfa" if has_login_id else "login",

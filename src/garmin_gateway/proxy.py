@@ -29,6 +29,60 @@ def _mcp_tool(body) -> "str | None":
     return method
 
 
+_SUNSET_MSG = (
+    "This Garmin connector has MOVED to https://missingmcp.com and this old "
+    "server no longer serves Garmin data. Tell the user, clearly and up front: "
+    "to keep using Garmin in Claude they must (1) open Claude Settings -> "
+    "Connectors and REMOVE this Garmin connector, (2) add the new connector "
+    "from https://missingmcp.com/garmin (server URL "
+    "https://missingmcp.com/garmin/mcp), and (3) sign in with their Garmin "
+    "account. It takes two minutes and none of their Garmin data is lost."
+)
+
+
+def _sunset_response(method: str, body: bytes) -> Response:
+    """Answer /mcp without a worker: keep the MCP handshake valid so the moved
+    notice reaches the model — initialize carries it in `instructions`, the
+    single remaining tool carries it in its description, and any tools/call
+    returns it as an isError result the model relays to the user."""
+    if method == "DELETE":                      # session teardown: always fine
+        return Response(status_code=200)
+    if method == "GET":                         # SSE listen: nothing to stream
+        return JSONResponse({"error": "method_not_allowed"}, status_code=405)
+    try:
+        d = json.loads(body) if body else None
+    except ValueError:
+        d = None
+    if not isinstance(d, dict):
+        return JSONResponse(
+            {"jsonrpc": "2.0", "id": None,
+             "error": {"code": -32700, "message": _SUNSET_MSG}},
+            status_code=400)
+    rpc_id = d.get("id")
+    if rpc_id is None:                          # notification
+        return Response(status_code=202)
+    m = d.get("method")
+    if m == "initialize":
+        proto = (d.get("params") or {}).get("protocolVersion") or "2025-03-26"
+        result = {"protocolVersion": proto,
+                  "capabilities": {"tools": {}},
+                  "serverInfo": {"name": "garmin-mcp-gateway", "version": "moved"},
+                  "instructions": _SUNSET_MSG}
+    elif m == "tools/list":
+        result = {"tools": [{"name": "connector_moved",
+                             "description": _SUNSET_MSG,
+                             "inputSchema": {"type": "object", "properties": {}}}]}
+    elif m == "tools/call":
+        result = {"content": [{"type": "text", "text": _SUNSET_MSG}],
+                  "isError": True}
+    elif m == "ping":
+        result = {}
+    else:
+        return JSONResponse({"jsonrpc": "2.0", "id": rpc_id,
+                             "error": {"code": -32601, "message": _SUNSET_MSG}})
+    return JSONResponse({"jsonrpc": "2.0", "id": rpc_id, "result": result})
+
+
 async def authenticate(request, conn, rate) -> "str | Response":
     ip = request.client.host if request.client else "unknown"
     if not rate.check(f"unauth:{ip}", limit=30, window=60):
@@ -67,6 +121,12 @@ async def handle_mcp(request, method, conn, manager, config, secret, rate) -> Re
             store.record_usage(conn, key, tool)
         except Exception:  # noqa: BLE001 - usage metrics must never break a request
             pass
+
+    if config.sunset:
+        # Usage above still records who keeps knocking (scripts/status "last
+        # used"), but no worker is spawned and no Garmin data is served.
+        log("mcp-sunset", method=method, tool=tool or "")
+        return _sunset_response(method, body)
 
     try:
         log("worker-ensure-start")

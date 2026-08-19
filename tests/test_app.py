@@ -5,7 +5,8 @@ from garmin_gateway.config import load_config
 
 def _client(tmp_path):
     cfg = load_config({"GATEWAY_SECRET": "s" * 40, "PUBLIC_URL": "https://gw.example.com",
-                       "DATA_DIR": str(tmp_path), "DB_PATH": str(tmp_path / "t.db")})
+                       "DATA_DIR": str(tmp_path), "DB_PATH": str(tmp_path / "t.db"),
+                       "GATEWAY_SUNSET": "0"})
     return TestClient(build_app(cfg))
 
 

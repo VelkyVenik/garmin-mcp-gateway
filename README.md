@@ -95,6 +95,7 @@ Set via environment (or `.env`). See [`.env.example`](.env.example).
 | `OPERATOR_NAME` / `OPERATOR_EMAIL` | no | — | Shown on the landing page. |
 | `GATEWAY_LOG_FILE` | no | — | If set, tees structured + stdlib logs to this file. |
 | `GATEWAY_LOG_LEVEL` | no | `info` | `debug`\|`info`\|`warning`\|`error`\|`critical`. `debug` is verbose (logs garminconnect/urllib3 internals) — avoid in production. |
+| `GATEWAY_SUNSET` | no | `1` (on) | Retirement mode: `/oauth/authorize` shows the moved-to-missingmcp.com page (no sign-in), `/mcp` answers every call with a moved notice instead of Garmin data (usage tracking stays on, no workers are spawned). Set `0` to run as a live gateway. |
 
 ## Monitoring
 

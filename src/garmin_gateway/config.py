@@ -20,6 +20,9 @@ class Config:
     access_token_ttl: int         # seconds; 0 disables expiry
     operator_name: str
     operator_email: str
+    sunset: bool                  # gateway retired: /authorize shows the moved
+                                  # page, /mcp answers every call with a
+                                  # "moved to missingmcp.com" notice
 
 
 def load_config(env: Mapping[str, str] | None = None) -> Config:
@@ -50,4 +53,8 @@ def load_config(env: Mapping[str, str] | None = None) -> Config:
         access_token_ttl=int(env.get("ACCESS_TOKEN_TTL_DAYS", "90")) * 86400,
         operator_name=env.get("OPERATOR_NAME", "the operator"),
         operator_email=env.get("OPERATOR_EMAIL", ""),
+        # Default ON: this repo is retired in favor of missingmcp.com, so a
+        # plain redeploy sunsets the gateway. Set GATEWAY_SUNSET=0 to run it
+        # as a normal gateway again.
+        sunset=env.get("GATEWAY_SUNSET", "1").lower() not in ("0", "false", "no"),
     )

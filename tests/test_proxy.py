@@ -7,7 +7,7 @@ from garmin_gateway.config import load_config
 
 def _cfg(tmp_path, fw):
     return load_config({"GATEWAY_SECRET": "s" * 40, "PUBLIC_URL": "https://x",
-                        "DATA_DIR": str(tmp_path),
+                        "DATA_DIR": str(tmp_path), "GATEWAY_SUNSET": "0",
                         "WORKER_PORT_START": str(fw.port), "WORKER_PORT_END": str(fw.port)})
 
 
